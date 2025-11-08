@@ -2,16 +2,16 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [System.Serializable]
-public struct EnemyMove
+public struct Move
 {
     public Vector2 direction;
     public float speed;
     public float duration;
 }
 
-public class EnemyController : MonoBehaviour
+public class NPCController : MonoBehaviour
 {
-    public EnemyMove[] moves;
+    public Move[] moves;
     public bool loop = true;
     
     private int currentMoveIndex = 0;
@@ -20,13 +20,27 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
     private Tilemap groundTilemap;
-    private GameTimer gameTimer; 
+    private GameTimer gameTimer;
 
     void Start()
     {
+        BoxCollider2D NPCcollider = GetComponent<BoxCollider2D>();
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            Collider2D playerCollider = player.GetComponent<Collider2D>();
+            if (playerCollider != null)
+            {
+                Physics2D.IgnoreCollision(NPCcollider, playerCollider, true);
+            }
+        }
         gameTimer = FindFirstObjectByType<GameTimer>();
         groundTilemap = FindFirstObjectByType<Tilemap>();
         rb.freezeRotation = true;
+    }
+    void Update()
+    {
+        UpdateTilePosition();
     }
     void UpdateTilePosition()
     {
@@ -42,10 +56,12 @@ public class EnemyController : MonoBehaviour
     void FixedUpdate()
     {
         if (moves.Length == 0) return;
-        EnemyMove currentMove = moves[currentMoveIndex];
+        Move currentMove = moves[currentMoveIndex];
         moveTimer += Time.deltaTime;
 
         rb.MovePosition(rb.position + currentMove.direction.normalized * currentMove.speed * Time.deltaTime * gameTimer.currentSpeed);
+        UpdateTilePosition();
+
         if (moveTimer >= currentMove.duration)
         {
             moveTimer = 0f;

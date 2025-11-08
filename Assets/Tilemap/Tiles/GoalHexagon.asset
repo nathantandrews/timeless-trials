@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GoalHexagon
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
   m_Sprite: {fileID: -712631045867808456, guid: b1d089368e804cd43908d0d29055f44b, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.08334708, a: 1}
+  m_Color: {r: 1, g: 1, b: 0, a: 1}
   m_Transform:
     e00: 1
     e01: 0
