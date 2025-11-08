@@ -18,10 +18,24 @@ public class EnemyController : MonoBehaviour
     private float moveTimer = 0f;
 
     [SerializeField] private Rigidbody2D rb;
+    private Tilemap groundTilemap;
+    private GameTimer gameTimer; 
 
     void Start()
     {
+        gameTimer = FindObjectOfType<GameTimer>();
+        groundTilemap = FindObjectOfType<Tilemap>();
         rb.freezeRotation = true;
+    }
+    void UpdateTilePosition()
+    {
+        Vector3Int currentCell = groundTilemap.WorldToCell(transform.position);
+        if (currentCell != lastCellPos)
+        {
+            TileOccupancyManager.Instance.LeaveTile(lastCellPos, gameObject);
+            TileOccupancyManager.Instance.EnterTile(currentCell, gameObject);
+            lastCellPos = currentCell;
+        }
     }
 
     void FixedUpdate()
@@ -30,7 +44,7 @@ public class EnemyController : MonoBehaviour
         EnemyMove currentMove = moves[currentMoveIndex];
         moveTimer += Time.deltaTime;
 
-        rb.MovePosition(rb.position + currentMove.direction.normalized * currentMove.speed * Time.deltaTime);
+        rb.MovePosition(rb.position + currentMove.direction.normalized * currentMove.speed * Time.deltaTime * gameTimer.currentSpeed);
         if (moveTimer >= currentMove.duration)
         {
             moveTimer = 0f;

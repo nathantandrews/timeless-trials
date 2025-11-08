@@ -8,6 +8,7 @@ public class GameTimer : MonoBehaviour
     private float currentTime;
 
     [Header("Speed Settings")]
+    public float currentSpeed = 1f;
     public float normalSpeed = 1f;
     public float movingSpeed = 2f;
 
@@ -33,7 +34,7 @@ public class GameTimer : MonoBehaviour
             return;
 
         // Determine timer speed
-        float speed = isPlayerMoving ? movingSpeed : normalSpeed;
+        currentSpeed = isPlayerMoving ? movingSpeed : normalSpeed;
 
         // Decrease time
         currentTime -= Time.deltaTime * speed;
