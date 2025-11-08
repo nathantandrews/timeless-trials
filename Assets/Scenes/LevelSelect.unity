@@ -1380,6 +1380,7 @@ GameObject:
   - component: {fileID: 1847221500}
   - component: {fileID: 1847221499}
   - component: {fileID: 1847221498}
+  - component: {fileID: 1847221501}
   m_Layer: 5
   m_Name: Level 0
   m_TagString: Untagged
@@ -1489,6 +1490,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847221496}
   m_CullTransparentMesh: 1
+--- !u!114 &1847221501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847221496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18b4acee53b594046be31f19998ee47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelButton
+  levelSceneName: Level0
 --- !u!1 &1935073458
 GameObject:
   m_ObjectHideFlags: 0
