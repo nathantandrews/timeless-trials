@@ -19,6 +19,11 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
 
+    void Start()
+    {
+        rb.freezeRotation = true;
+    }
+
     void FixedUpdate()
     {
         if (moves.Length == 0) return;
