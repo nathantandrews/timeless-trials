@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour
         // Set gravity scale to 0 for top-down 2D movement (or keep it if you want gravity)
         rb.gravityScale = 0f;
 
-        gameTimer = FindObjectOfType<GameTimer>();
+        gameTimer = FindFirstObjectByType<GameTimer>();
 
     }
     

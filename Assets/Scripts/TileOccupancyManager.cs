@@ -91,6 +91,8 @@ public class TileOccupancyManager : MonoBehaviour
 
         bool hasPlayer = false;
         bool hasEnemy = false;
+        bool hasAlly = false;
+        bool hasGoal = false;
         GameObject player = null;
 
         foreach (var e in entities)
@@ -101,6 +103,8 @@ public class TileOccupancyManager : MonoBehaviour
                 player = e;
             }
             if (e.CompareTag("Enemy")) hasEnemy = true;
+            if (e.CompareTag("Goal")) hasGoal = true;
+            if (e.CompareTag("Ally")) hasAlly = true;
         }
 
         if (hasPlayer && hasEnemy && player != null)
@@ -109,5 +113,12 @@ public class TileOccupancyManager : MonoBehaviour
             var behavior = player.GetComponent<PlayerBehavior>();
             behavior?.KillPlayer();
         }
+        if (hasPlayer && hasGoal && player != null)
+        {
+            Debug.Log($"Player and Goal on same tile: {cellPos}");
+            var gm = FindFirstObjectByType<GameManager>();
+            gm?.EndLevel();
+        }
+
     }
 }
