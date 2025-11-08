@@ -7,30 +7,31 @@ public class TileOccupancyManager : MonoBehaviour
     public static TileOccupancyManager Instance;
 
     [Header("References")]
-    public Tilemap tilemap; // Assign in the Inspector
+    public Tilemap tilemap;
+
+    [Header("Tiles")]
+    public TileBase defaultTile;
+    public TileBase playerTile;
+    public TileBase enemyTile;
+    public TileBase allyTile;
+    public TileBase goalTile;
 
     private Dictionary<Vector3Int, List<GameObject>> occupancy = new();
+    private Dictionary<Vector3Int, TileBase> originalTiles = new();
 
     void Awake()
     {
         Instance = this;
-
-        if (tilemap == null)
-        {
-            tilemap = GetComponent<Tilemap>();
-        }
     }
 
     public void EnterTile(Vector3Int cellPos, GameObject entity)
     {
         if (!occupancy.ContainsKey(cellPos))
-        {
             occupancy[cellPos] = new List<GameObject>();
-        }
 
         occupancy[cellPos].Add(entity);
 
-        UpdateTileColor(cellPos);
+        UpdateTileAppearance(cellPos);
         CheckCollision(cellPos);
     }
 
@@ -45,50 +46,51 @@ public class TileOccupancyManager : MonoBehaviour
             }
         }
 
-        UpdateTileColor(cellPos);
+        UpdateTileAppearance(cellPos);
     }
 
-    private void UpdateTileColor(Vector3Int cellPos)
+    private void UpdateTileAppearance(Vector3Int cellPos)
     {
         if (tilemap == null) return;
 
-        Color color = Color.white;
-
-        if (occupancy.TryGetValue(cellPos, out var entities))
+        // If no entities, restore original tile
+        if (!occupancy.TryGetValue(cellPos, out var entities) || entities.Count == 0)
         {
-            bool hasPlayer = false;
-            bool hasEnemy = false;
-            bool hasAlly = false;
-            bool hasGoal = false;
-
-            foreach (var e in entities)
+            if (originalTiles.TryGetValue(cellPos, out var originalTile))
             {
-                if (e.CompareTag("Player")) hasPlayer = true;
-                if (e.CompareTag("Enemy")) hasEnemy = true;
-                if (e.CompareTag("Ally")) hasAlly = true;
-                if (e.CompareTag("Goal")) hasGoal = true;
+                tilemap.SetTile(cellPos, originalTile);
+                originalTiles.Remove(cellPos); // optional, to keep dictionary clean
             }
-
-            // Color priority: Red if Enemy, Blue if Player
-            if (hasEnemy) color = Color.red;
-            else if (hasPlayer) color = Color.cyan;
-            else if (hasAlly) color = Color.green;
-            else if (hasGoal) color = Color.gold;
+            return;
         }
 
-        tilemap.SetColor(cellPos, color);
-    }
-
-    private void CheckCollision(Vector3Int cellPos)
-    {
-        if (!occupancy.TryGetValue(cellPos, out var entities))
-            return;
+        // Store original tile if not already stored
+        if (!originalTiles.ContainsKey(cellPos))
+            originalTiles[cellPos] = tilemap.GetTile(cellPos);
 
         bool hasPlayer = false;
         bool hasEnemy = false;
         bool hasAlly = false;
-        bool hasGoal = false;
 
+        foreach (var e in entities)
+        {
+            if (e.CompareTag("Player")) hasPlayer = true;
+            if (e.CompareTag("Enemy")) hasEnemy = true;
+            if (e.CompareTag("Ally")) hasAlly = true;
+        }
+
+        // Priority for display
+        if (hasEnemy) tilemap.SetTile(cellPos, enemyTile);
+        else if (hasPlayer) tilemap.SetTile(cellPos, playerTile);
+        else if (hasAlly) tilemap.SetTile(cellPos, allyTile);
+    }
+
+    private void CheckCollision(Vector3Int cellPos)
+    {
+        if (!occupancy.TryGetValue(cellPos, out var entities)) return;
+
+        bool hasPlayer = false;
+        bool hasEnemy = false;
         GameObject player = null;
 
         foreach (var e in entities)
@@ -99,38 +101,13 @@ public class TileOccupancyManager : MonoBehaviour
                 player = e;
             }
             if (e.CompareTag("Enemy")) hasEnemy = true;
-            if (e.CompareTag("Ally")) hasAlly = true;
-            if (e.CompareTag("Goal")) hasGoal = true;
         }
 
-        if (hasPlayer && hasEnemy)
+        if (hasPlayer && hasEnemy && player != null)
         {
             Debug.Log($"Player and Enemy on same tile: {cellPos}");
-            KillPlayer(player);
-        }
-
-        if (hasPlayer && hasGoal)
-        {
-            Debug.Log($"Player reached the goal: {cellPos}");
-        }
-
-        if (hasPlayer && hasAlly)
-        {
-            Debug.Log($"Player and Ally on same tile: {cellPos}");
-        }
-    }
-
-    public void KillPlayer(GameObject player)
-    {
-        var behavior = player.GetComponent<PlayerBehavior>();
-        if (behavior != null)
-        {
-            behavior.KillPlayer();
-        }
-        else
-        {
-            player.SetActive(false);
-            Debug.Log("Player died (no PlayerBehavior found).");
+            var behavior = player.GetComponent<PlayerBehavior>();
+            behavior?.KillPlayer();
         }
     }
 }
