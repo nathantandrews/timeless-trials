@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Hexagon Flat Top3
+  m_Name: SandPitHexagon
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
   m_Sprite: {fileID: -712631045867808456, guid: b1d089368e804cd43908d0d29055f44b, type: 3}
   m_Color: {r: 0.92452824, g: 0.8337597, b: 0.31274465, a: 1}
