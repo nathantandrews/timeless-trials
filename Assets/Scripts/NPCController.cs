@@ -21,6 +21,7 @@ public class NPCController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     private Tilemap groundTilemap;
     private GameTimer gameTimer;
+    public SpriteRenderer spriteRenderer;
 
     void Start()
     {
@@ -129,8 +130,18 @@ public class NPCController : MonoBehaviour
         Debug.Log($"NPC {gameObject.name} Died!");
         rb.linearVelocity = Vector2.zero;
 
+        // Remove from tile *before* disabling
+        if (TileOccupancyManager.Instance != null)
+            TileOccupancyManager.Instance.LeaveTile(lastCellPos, gameObject);
+
+        // Then deactivate the object
         gameObject.SetActive(false);
+
+        // Optional: clear any leftover or null entries for safety
+        if (TileOccupancyManager.Instance != null)
+            TileOccupancyManager.Instance.CleanupTile(lastCellPos);
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -140,6 +151,11 @@ public class NPCController : MonoBehaviour
             moves[i].direction *= -1;
         }
 
-        Debug.Log($"{name} hit {collision.gameObject.name}, reversing all moves");
+        spriteRenderer.flipX = !spriteRenderer.flipX;
+        spriteRenderer.flipY = !spriteRenderer.flipY;
+        // Debug.Log($"{name} hit {collision.gameObject.name}, reversing all moves and flipping the sprite");
+        // Debug.Log($"spriteRenderer.flipX: {spriteRenderer.flipX}");
+        // Debug.Log($"spriteRenderer.flipY: {spriteRenderer.flipY}");
     }
+
 }

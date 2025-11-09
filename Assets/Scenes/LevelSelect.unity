@@ -137,27 +137,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -624.86346
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -348.71643
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -189,11 +189,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 312.06827
+      value: 312.06824
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -128.6418
+      value: -128.64178
       objectReference: {fileID: 0}
     - target: {fileID: 5004560000526414328, guid: de15c9cfaa688864583d44e8ccf3cdb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
