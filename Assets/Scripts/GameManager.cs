@@ -159,6 +159,16 @@ public class GameManager : MonoBehaviour
 
         if (passedLevel)
         {
+            // Get current level number
+            string currentScene = SceneManager.GetActiveScene().name;
+            int currentLevel = ParseLevelNumber(currentScene);
+
+            // ✅ Unlock next level
+            if (LevelProgressManager.Instance != null)
+            {
+                LevelProgressManager.Instance.UnlockNextLevel(currentLevel);
+            }
+
             ShowVictoryPanel();
         }
         else
@@ -195,5 +205,16 @@ public class GameManager : MonoBehaviour
     {
         HideAllPanels();
         if (deathPanel != null) deathPanel.SetActive(true);
+    }
+
+    private int ParseLevelNumber(string sceneName)
+    {
+        if (sceneName.StartsWith("Level"))
+        {
+            string numberPart = sceneName.Substring(5);
+            if (int.TryParse(numberPart, out int result))
+                return result;
+        }
+        return 1; // fallback
     }
 }

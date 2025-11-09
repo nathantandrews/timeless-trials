@@ -5,7 +5,7 @@ public class LevelProgressManager : MonoBehaviour
     public static LevelProgressManager Instance { get; private set; }
 
     private const string ProgressKey = "HighestLevelUnlocked";
-    public int HighestLevelUnlocked { get; private set; } = 1;
+    public int HighestLevelUnlocked { get; private set; } = 0;
 
     void Awake()
     {
@@ -39,12 +39,12 @@ public class LevelProgressManager : MonoBehaviour
 
     public void LoadProgress()
     {
-        HighestLevelUnlocked = PlayerPrefs.GetInt(ProgressKey, 1);
+        HighestLevelUnlocked = PlayerPrefs.GetInt(ProgressKey, 0);
     }
 
     public void ResetProgress()
     {
         PlayerPrefs.DeleteKey(ProgressKey);
-        HighestLevelUnlocked = 1;
+        HighestLevelUnlocked = 0;
     }
 }
