@@ -131,4 +131,15 @@ public class NPCController : MonoBehaviour
 
         gameObject.SetActive(false);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Reverse every move direction
+        for (int i = 0; i < moves.Length; i++)
+        {
+            moves[i].direction *= -1;
+        }
+
+        Debug.Log($"{name} hit {collision.gameObject.name}, reversing all moves");
+    }
 }
