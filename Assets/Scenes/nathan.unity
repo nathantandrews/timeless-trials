@@ -249,6 +249,22 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 240227628443733330, guid: c84424b7a63d1f54f906073e4e02e40d, type: 3}
+      propertyPath: m_Size.x
+      value: 0.23807555
+      objectReference: {fileID: 0}
+    - target: {fileID: 240227628443733330, guid: c84424b7a63d1f54f906073e4e02e40d, type: 3}
+      propertyPath: m_Size.y
+      value: 0.33331627
+      objectReference: {fileID: 0}
+    - target: {fileID: 240227628443733330, guid: c84424b7a63d1f54f906073e4e02e40d, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.004762009
+      objectReference: {fileID: 0}
+    - target: {fileID: 240227628443733330, guid: c84424b7a63d1f54f906073e4e02e40d, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.004762046
+      objectReference: {fileID: 0}
     - target: {fileID: 431039993948508328, guid: c84424b7a63d1f54f906073e4e02e40d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
