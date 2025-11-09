@@ -13,6 +13,8 @@ public class PlayerBehavior : MonoBehaviour
     private Tilemap groundTilemap;
 
     private Vector3Int lastCellPos;
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
     void Start()
     {
@@ -49,6 +51,13 @@ public class PlayerBehavior : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         moveDirection = new Vector2(horizontal, vertical).normalized;
+        if (spriteRenderer != null)
+        {
+            if (horizontal < 0)
+                spriteRenderer.flipX = true;
+            else if (horizontal > 0)
+                spriteRenderer.flipX = false;
+        }
     }
 
     void FixedUpdate()
@@ -67,6 +76,10 @@ public class PlayerBehavior : MonoBehaviour
         // Continues to walk when dead or makes it to goal
         //SoundManager.Instance?.HandleWalkingSound(isMoving);
 
+        if (animator != null)
+        {
+            animator.SetBool("isMoving", moveDirection.magnitude >= 0.1f);            
+        }
         // Track tile position
         UpdateTilePosition();
     }
