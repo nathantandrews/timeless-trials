@@ -25,7 +25,7 @@ public class TileOccupancyManager : MonoBehaviour
         Instance = this;
         if (tilemap == null)
             tilemap = GetComponent<Tilemap>();
-        Debug.Log($"[TOM] Awake. tilemap={(tilemap!=null?tilemap.name:"NULL")}");
+        // Debug.Log($"[TOM] Awake. tilemap={(tilemap!=null?tilemap.name:"NULL")}");
     }
 
     public void EnterTile(Vector3Int cellPos, GameObject entity)
@@ -38,7 +38,7 @@ public class TileOccupancyManager : MonoBehaviour
         if (!occupancy[cellPos].Contains(entity))
             occupancy[cellPos].Add(entity);
 
-        Debug.Log($"[TOM] EnterTile {cellPos} by {entity.name} (tag={entity.tag}) - occupants={occupancy[cellPos].Count}");
+        // Debug.Log($"[TOM] EnterTile {cellPos} by {entity.name} (tag={entity.tag}) - occupants={occupancy[cellPos].Count}");
         UpdateTileAppearance(cellPos);
         CheckCollision(cellPos);
     }
@@ -47,21 +47,18 @@ public class TileOccupancyManager : MonoBehaviour
     {
         if (!occupancy.TryGetValue(cellPos, out var list))
         {
-            // nothing to remove, but log for debugging
-            Debug.Log($"[TOM] LeaveTile called for {cellPos} but no list exists (entity={entity.name})");
-            return;
+            // create a temporary list so UpdateTileAppearance can still work
+            list = new List<GameObject>();
         }
 
-        if (list.Remove(entity))
-            Debug.Log($"[TOM] LeaveTile {cellPos} removed {entity.name} remaining={list.Count}");
-        else
-            Debug.Log($"[TOM] LeaveTile {cellPos} did NOT remove {entity.name} (not found)");
+        list.RemoveAll(e => e == null || !e.activeSelf || e == entity);
 
         if (list.Count == 0)
             occupancy.Remove(cellPos);
 
         UpdateTileAppearance(cellPos);
     }
+
 
     private void UpdateTileAppearance(Vector3Int cellPos)
     {
@@ -75,7 +72,7 @@ public class TileOccupancyManager : MonoBehaviour
                 tilemap.SetTileFlags(cellPos, TileFlags.None);
                 tilemap.SetTile(cellPos, orig);
                 originalTiles.Remove(cellPos);
-                Debug.Log($"[TOM] Restored original tile at {cellPos}");
+                // Debug.Log($"[TOM] Restored original tile at {cellPos}");
             }
             return;
         }
@@ -102,7 +99,7 @@ public class TileOccupancyManager : MonoBehaviour
 
         tilemap.SetTileFlags(cellPos, TileFlags.None);
         tilemap.SetTile(cellPos, toSet);
-        Debug.Log($"[TOM] Set tile at {cellPos} to {(toSet!=null?toSet.name:"NULL")} (P:{hasPlayer} E:{hasEnemy} A:{hasAlly})");
+        // Debug.Log($"[TOM] Set tile at {cellPos} to {(toSet!=null?toSet.name:"NULL")} (P:{hasPlayer} E:{hasEnemy} A:{hasAlly})");
     }
 
     private void CheckCollision(Vector3Int cellPos)
@@ -141,7 +138,7 @@ public class TileOccupancyManager : MonoBehaviour
 
         if (hasEnemy && hasAlly)
         {
-            Debug.Log($"[TOM] Ally {ally.name} died at {cellPos} due to {enemy.name}");
+            Debug.Log($"[TOM] {ally.name} died at {cellPos} due to {enemy.name}");
             var al = ally.GetComponent<NPCController>();
             al?.KillNPC();
         }
@@ -162,10 +159,23 @@ public class TileOccupancyManager : MonoBehaviour
         }
     }
 
+    public void CleanupTile(Vector3Int cellPos)
+    {
+        if (!occupancy.TryGetValue(cellPos, out var list))
+            return;
+
+        list.RemoveAll(e => e == null || !e.activeSelf);
+        if (list.Count == 0)
+            occupancy.Remove(cellPos);
+
+        UpdateTileAppearance(cellPos);
+    }
+
+
     // debug helper (call from editor or other scripts)
     public void PrintOccupancy()
     {
-        Debug.Log("[TOM] Occupancy dump:");
+        // Debug.Log("[TOM] Occupancy dump:");
         foreach (var kv in occupancy)
         {
             var names = string.Join(", ", kv.Value.ConvertAll(g => g.name));
